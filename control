@@ -1,0 +1,9 @@
+Package: com.vrr.client
+Name: VRR Client
+Version: 6.0
+Architecture: iphoneos-arm
+Description: VRR Client for Animal Company
+Maintainer: VRR
+Author: VRR
+Section: Tweaks
+Depends: mobilesubstrate
