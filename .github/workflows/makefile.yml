@@ -11,25 +11,29 @@ jobs:
       THEOS: ${{ github.workspace }}/theos
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
-      - name: Install Theos
+      - name: Setup Theos & SDKs (Modern)
         run: |
+          # Clone Theos
           git clone --recursive https://github.com/theos/theos.git $THEOS
-
-      - name: Download iOS SDK (The Fix)
-        run: |
-          curl -LO https://github.com/theos/sdks/archive/master.zip
-          unzip master.zip
-          mv sdks-master/*.sdk $THEOS/sdks
-          rm -r sdks-master master.zip
+          
+          # Download iOS 16.5 SDK (Fixes 'missing SDK' and 'outdated' errors)
+          curl -L -o iOS16.5.sdk.tar.xz https://github.com/theos/sdks/releases/download/16.5/iPhoneOS16.5.sdk.tar.xz
+          tar -xf iOS16.5.sdk.tar.xz
+          mkdir -p $THEOS/sdks
+          mv iPhoneOS16.5.sdk $THEOS/sdks/
+          rm iOS16.5.sdk.tar.xz
 
       - name: Build Package
         run: |
-          make package FINALPACKAGE=1
+          # Forces arm64 only (No old 32-bit stuff)
+          make package FINALPACKAGE=1 messages=yes
 
-      - name: Upload .deb
-        uses: actions/upload-artifact@v3
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
         with:
           name: VRRClient_DEB
           path: packages/*.deb
