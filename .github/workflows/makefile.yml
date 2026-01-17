@@ -2,7 +2,7 @@ name: Build VRR Client
 
 on:
   push:
-  workflow_dispatch:  # <--- THIS ADDS THE BUTTON
+  workflow_dispatch:
 
 jobs:
   build:
