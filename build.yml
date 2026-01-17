@@ -1,6 +1,8 @@
 name: Build VRR Client
 
-on: [push]
+on:
+  push:
+  workflow_dispatch:  # <--- THIS ADDS THE BUTTON
 
 jobs:
   build:
